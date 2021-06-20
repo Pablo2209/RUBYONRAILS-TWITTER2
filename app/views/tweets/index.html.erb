@@ -1,4 +1,56 @@
+<% if user_signed_in? %>
+
+    <div class="container">
+        <p id="notice"><%= notice %></p>
+        <h1>Tweets</h1>
+        <!-- Modal para agregar amigos -->
+        <button type="button" class="btn btn-primary d-inline-block" data-toggle="modal" data-target="#exampleModal">Agregar amigos</button>
+
+        <!-- Modal con los amigos -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <h3 class="modal-title mb-3" id="exampleModalLabel">Amigos para agregar</h5>
+                        <!--listado de usuarios-->
+                        <% @users.each do |user|%>
+                            <!-- evitamos que usuario pueda seguirse a sí mismo -->
+                            <% if user.id == current_user.id %>
+                            <% else %>
+                                <div class="card mx-auto mb-3" style="width: 60%">
+                                    <div class="card-body text-center">
+                                        <img src="<%= user.photo_url %>" width="60" height="60" class="rounded-circle mb-2">
+                                        <div class="d-inline-block">
+                                            <h4 class="card-title pl-3"><%= user.name %></h4>
+                                        </div>
+                                        <p>Tweets <%= user.tweets.count %></p>
+                                        <%= link_to(user_friends_path(user.id), method: :post)do%><i class="fas fa-user-plus fa-2x"></i><% end %>
+                                    </div>
+                                </div>
+                            <% end %>
+                        <% end %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%= render 'form', tweet: @tweet %>
+<% end %>
+
+<div class="mx-1">
+    <%= render 'shared/tweetslist', tweet: @tweet %>
+</div>
 
 
+<br>
 
-<%= render 'form', tweet: @tweet %>
+<!-- paginamos los tweets 
+<div class="container mx-auto">
+    <div class="col-md-8 offset-md-3 mb-4">
+        <%= link_to_next_page @tweets, 'Mostrar más tweets' %>
+        <br>
+        <%= link_to_prev_page @tweets, 'Volver a tweets anteriores' %>
+    </div>
+</div>
+-->
