@@ -1,9 +1,27 @@
 class TweetsController < ApplicationController
   before_action :set_tweet, only: %i[ show edit update destroy ]
+  skip_before_action :verify_authenticity_token
 
   # GET /tweets or /tweets.json
   def index
     @tweet = Tweet.new
+    @@retweet = 0
+
+    if user_signed_in?
+      @users = User.add_friends(current_user)
+    end
+    
+    if params[:tweetsearch].present?
+      @tweets = Tweet.search_my_tweets(params[:tweetsearch]).page(params[:page]).order("created_at DESC")
+    elsif params[:hashtag].present?
+      @tweets = Tweet.search_my_tweets("##{params[:hashtag]}").page(params[:page]).order("created_at DESC")
+      @users = User.add_friends(current_user)
+    elsif user_signed_in?
+      @tweets = Tweet.tweets_for_me(current_user).page(params[:page]).order("created_at DESC")
+      @users = User.add_friends(current_user)
+    else
+      @tweets = Tweet.all.page(params[:page]).order("created_at DESC")
+    end
   end
 
   # GET /tweets/1 or /tweets/1.json
@@ -27,10 +45,12 @@ class TweetsController < ApplicationController
   def create
     @tweet = Tweet.new(tweet_params)
     @tweet.user_id = current_user.id
+    @tweet.tweet_id = @@retweet
+    
 
     respond_to do |format|
       if @tweet.save
-        format.html { redirect_to root_path, notice: "Tweet was successfully created." }
+        format.html { redirect_to root_path, notice: "Has creado un tweet!" }
         format.json { render :show, status: :created, location: @tweet }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -61,6 +81,11 @@ class TweetsController < ApplicationController
     end
   end
 
+  def retweet
+    @tweet = Tweet.new
+    @@retweet = params[:id]
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_tweet
@@ -69,6 +94,6 @@ class TweetsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def tweet_params
-      params.require(:tweet).permit(:content)
+      params.require(:tweet).permit(:content, :user_id, :tweet_id)
     end
 end
