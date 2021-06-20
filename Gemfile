@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.7.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.5'
+gem 'rails', '~> 6.1.1'
 # database
 gem 'sqlite3', group: :development
 gem 'pg', group: :production
@@ -63,3 +63,6 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 ##Mis gemas 
 # Devise is a flexible authentication solution for Rails based on Warden
 gem 'devise'
+
+# A Scope & Engine based, clean, powerful, customizable and sophisticated paginator for modern web app frameworks and ORMs
+gem 'kaminari'

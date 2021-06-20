@@ -19,6 +19,7 @@ class TweetsController < ApplicationController
     elsif user_signed_in?
       @tweets = Tweet.tweets_for_me(current_user).page(params[:page]).order("created_at DESC")
       @users = User.add_friends(current_user)
+    
     else
       @tweets = Tweet.all.page(params[:page]).order("created_at DESC")
     end

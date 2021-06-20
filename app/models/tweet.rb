@@ -38,4 +38,6 @@ class Tweet < ApplicationRecord
         self.where(id: my_tweet_id_array)
     end
 
+    /Codigo de kaminari, cantidad de elementos por pagina/
+    paginates_per 5
 end

@@ -1,5 +1,4 @@
 class FriendsController < ApplicationController
-
     before_action :find_user
 
     def create
