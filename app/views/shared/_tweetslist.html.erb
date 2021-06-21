@@ -79,12 +79,13 @@
                                 <% else %>
                                     <%= link_to(tweet_likes_path(tweet.id), method: :post)do%><i class="far fa-thumbs-up fa-2x d-inline-block"></i><% end %>
                                 <% end %>
+                            <% end %>
                             </div>
                             <div class="d-inline-block col-2">
                                 <!-- habilitamos boton de retweet -->
                                 <%= button_to 'Retweet', retweet_path(tweet.id), method: :get, :class => 'btn btn-primary' %>
                             </div>
-                            <% end %>
+                            
                         </div>
                     </div>
                 </div>
